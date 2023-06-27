@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    public Text counterText;
     public Text timerText;
     public Text gameOverText;
     public Button restartButton;
@@ -16,14 +14,22 @@ public class UIManager : MonoBehaviour
     public float rotationSpeed = 50f;
 
     private float timer = 0f;
-    private float countdownDuration = 20f;
+    private float countdownDuration = 10f;
     private bool isCountdownRunning = false;
     private bool isGameOver = false;
     private bool gameStarted = false;
 
-    private void Start()
+    public Text counterText;
+    public Text bestScoreName;
+
+    private Counter counterScript; 
+
+    public void Start()
     {
         isCountdownRunning = false;
+
+        MainManager.Instance.LoadData();
+        bestScoreName.text = $"Best Score: {MainManager.Instance.bestScoreText} : {MainManager.Instance.bestScore}";
 
 
         if (counterText == null)
@@ -103,6 +109,7 @@ public class UIManager : MonoBehaviour
                 isCountdownRunning = true;
             }
         }
+        
     }
 
     public void UpdateCounterText(int count)
@@ -135,6 +142,7 @@ public class UIManager : MonoBehaviour
         if (gameOverText != null)
         {
             gameOverText.gameObject.SetActive(true);
+
         }
 
         // Desactivar el movimiento de los "Player"
@@ -148,11 +156,14 @@ public class UIManager : MonoBehaviour
         {
             restartButton.gameObject.SetActive(true);
         }
+        MainManager.Instance.SaveData(Counter.globalCount);
     }
 
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
+        Counter.RestartGlobalCount();
+                
     }
     public void StartGame()
     {

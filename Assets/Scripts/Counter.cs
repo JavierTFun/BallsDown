@@ -8,6 +8,17 @@ public class Counter : MonoBehaviour
     public static int globalCount = 0;
     public AudioClip collisionSound; // Sonido de colisión del jugador con el agujero
 
+
+    private void Start()
+    { 
+        UIManager uiManager = FindObjectOfType<UIManager>();
+        if (uiManager != null)
+        {
+            uiManager.StartCountdown();
+        }
+    }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -30,6 +41,7 @@ public class Counter : MonoBehaviour
                     UIManager uiManager = FindObjectOfType<UIManager>();
                     uiManager?.UpdateCounterText(globalCount);
 
+
                     // Reproducir el sonido de colisión
                     if (collisionSound != null)
                     {
@@ -37,17 +49,17 @@ public class Counter : MonoBehaviour
                     }
 
                     Destroy(other.gameObject);
+
+                   
                 }
             }
         }
     }
 
-    private void Start()
+  
+  
+    public static void RestartGlobalCount()
     {
-        UIManager uiManager = FindObjectOfType<UIManager>();
-        if (uiManager != null)
-        {
-            uiManager.StartCountdown();
-        }
+        globalCount = 0;
     }
 }
